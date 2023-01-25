@@ -44,21 +44,18 @@ Shader "Unlit/Mandelbrot"
                 return o;
             }
 
-            fixed4 frag (v2f i) : SV_Target
-            {
-                // sample the texture
-                float2 z = float2(0, 0);
+			fixed4 frag(v2f i) : SV_Target
+			{
+				float2 z = float2(0, 0);
 				float steps = 0;
 				while (z.x * z.x + z.y * z.y < 4 && steps < 1)
 				{
+					// z = z^2 + c
 					z = float2(z.x * z.x + i.uv.x - z.y * z.y, 2 * z.x * z.y + i.uv.y);
 					steps += 0.005;
 				}
-				fixed4 col = tex2D(_MainTex, float2(steps, 0));
-				// apply fog
-               // UNITY_APPLY_FOG(i.fogCoord, col);
-				return col;// fixed4(steps, steps, steps, 1);
-            }
+				return tex2D(_MainTex, float2(steps, 0)); // color
+			}
             ENDCG
         }
     }
